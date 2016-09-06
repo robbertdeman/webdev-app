@@ -17,7 +17,7 @@ gulp.task('scripts', () => {
     .bundle();
 
   return bundler
-    .pipe(source('script.js'))
+    .pipe(source('bundle.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(uglify())
@@ -31,7 +31,7 @@ gulp.task('sass', function () {
     .pipe(sourcemaps.init())
     .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('css'))
+    .pipe(gulp.dest('dist'))
     .pipe(browserSync.stream());
 });
 
