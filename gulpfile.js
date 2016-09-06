@@ -5,28 +5,36 @@ const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const sass = require('gulp-sass');
+const sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('scripts', () => {
-    var bundler = browserify('./src/script.es6')
-        .transform(babelify, {presets: ['es2015']})
-        .bundle();
+  var bundler = browserify({
+      entries: './src/script.es6',
+      debug: true
+    })
+    .transform(babelify, {presets: ['es2015']})
+    .bundle();
 
-    return bundler
-        .pipe(source('script.js'))
-        .pipe(buffer())
-        .pipe(uglify())
-        .pipe(gulp.dest('dist'));
+  return bundler
+    .pipe(source('script.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(uglify())
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('dist'));
 });
 
 gulp.task('sass', function () {
-    return gulp.src('./sass/**/*.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('css'));
+  return gulp.src('./sass/**/*.scss')
+    .pipe(sourcemaps.init())
+    .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('css'));
 });
 
 gulp.task('watch', () => {
-    gulp.watch('./src/**/*.*', ['scripts']);
-    gulp.watch('./sass/**/*.scss', ['sass']);
+  gulp.watch('./src/**/*.*', ['scripts']);
+  gulp.watch('./sass/**/*.scss', ['sass']);
 });
 
 gulp.task('default', ['watch', 'scripts']);
