@@ -6,6 +6,7 @@ const buffer = require('vinyl-buffer');
 const uglify = require('gulp-uglify');
 const sourcemaps = require('gulp-sourcemaps');
 const sass = require('gulp-sass');
+const browserSync = require('browser-sync').create();
 
 gulp.task('run', function() {
     var bundler = browserify('./src/script.es6', {debug:true})
@@ -27,9 +28,18 @@ gulp.task('sass', function () {
         .pipe(gulp.dest('./css'));
 });
 
+gulp.task('browser-sync', function() {
+    browserSync.init({
+        server: {
+            baseDir: "./"
+        }
+    });
+});
+
 gulp.task('watch', function() {
     gulp.watch('./src/**/*.*', ['run']);
     gulp.watch('./sass/**/*.scss', ['sass']);
+    gulp.watch(['./dist/**/*.*','./css/**/*.*','./*.html']).on('change', browserSync.reload);
 });
 
-gulp.task('default', ['watch', 'run', 'sass']);
+gulp.task('default', ['watch', 'run', 'sass', 'browser-sync']);
