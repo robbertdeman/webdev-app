@@ -20,7 +20,11 @@ Make sure these are installed first.
 ### Installing
 
 In the folder where you want the project to be created, run
-`git clone https://github.com/hansvana/es6boiler.git yourprojectname`
+
+```
+git clone https://github.com/hansvana/es6boiler.git yourprojectname
+```
+
 Change `yourprojectname` to what you want the name of the folder to be.
 
 Go into your new folder with `cd yourprojectname` and then install all 
