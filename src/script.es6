@@ -1,13 +1,24 @@
-const ImportedClass = require('./module.es6');
+const GoogleMaps = require("./GoogleMapsAPI.es6");
+const DarkSkyAPI = require("./DarkSkyAPI.es6");
+const WeatherView = require("./WeatherView.es6");
 
-class Test {
-    constructor(a, b) {
-        this._a = a;
-        this._b = b;
-        this._c = new ImportedClass();
+class Controller {
+    constructor() {
+        this.googleMaps = new GoogleMaps();
+        this.darkSkyAPI = new DarkSkyAPI(this.googleMaps.latLng, this.watch());
+        this.weatherView = new WeatherView();
+    }
+    watch() {
+        this.googleMaps.map.addListener('bounds_changed', () => {
+            this.googleMaps.changeBounds();
+        });
+        this.googleMaps.searchBox.addListener('places_changed', () => {
+            this.googleMaps.changeMarker();
+            this.darkSkyAPI = new DarkSkyAPI(this.googleMaps.latLng);
+        });
     }
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    let t = new Test(0,0);
+    new Controller();
 });
