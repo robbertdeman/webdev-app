@@ -21,7 +21,9 @@ class DarkSkyAPI {
     response(data) {
         this.jsonData = data;
         console.log(data);
-        this.callback();
+
+        // de callback alleen uitvoeren als er één is meegegeven
+        if (this.callback) this.callback();
     }
     get weatherData() {
         return {weather: this.jsonData};
