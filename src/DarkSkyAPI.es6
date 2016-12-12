@@ -11,7 +11,6 @@ class DarkSkyAPI {
         this.xhttp.onreadystatechange = ()=> {
             if (this.xhttp.readyState == 4 && this.xhttp.status == 200) {
                 this.response(JSON.parse(this.xhttp.responseText));
-
             }
         };
         this.xhttp.open("GET", this.darkSkyURL, true);
@@ -20,8 +19,6 @@ class DarkSkyAPI {
     }
     response(data) {
         this.jsonData = data;
-        console.log(data);
-
         // de callback alleen uitvoeren als er één is meegegeven
         if (this.callback) this.callback();
     }
