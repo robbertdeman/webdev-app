@@ -1,5 +1,3 @@
-const Skycons = require("./skycons.js");
-
 class WeatherView {
     constructor() {
         this.view = document.getElementById('weerinfo');
@@ -8,38 +6,22 @@ class WeatherView {
         ];
     }
     divideData(data, location) {
-        if (typeof location !== 'undefined') {
-            this.locationData(location);
-        }
-        else {
-            console.log("geen locatie");
-        }
+        // verwijder alle oude data
+        this.view.innerHTML = "";
+
+        //checken of de data klopt
+        typeof location !== 'undefined' ? this.locationData(location) : console.log("geen locatie");
 
         if (typeof data !== 'undefined' && typeof data.weather !== 'undefined') {
             console.log(data.weather);
-            if (typeof data.weather["minutely"] !== 'undefined') {
-                this.minutelyData(data.weather["minutely"]);
-            }
-            else {
-                console.log("er is geen minutly data");
-            }
 
-            if (typeof data.weather["hourly"] !== 'undefined') {
-                this.hourlyData(data.weather["hourly"]);
-            }
-            else {
-                console.log("er is geen hourly data");
-            }
-
-            if (typeof data.weather["daily"] !== 'undefined') {
-                this.dailyData(data.weather["daily"]);
-            }
-            else {
-                console.log("er is geen daily data");
-            }
+            //welke data is er?
+            typeof data.weather["minutely"] !== 'undefined' ? this.minutelyData(data.weather["minutely"]) : console.log("er is geen minutly data");
+            typeof data.weather["hourly"] !== 'undefined' ? this.hourlyData(data.weather["hourly"]) : console.log("er is geen hourly data");
+            typeof data.weather["daily"] !== 'undefined' ? this.dailyData(data.weather["daily"]) : console.log("er is geen daily data");
         }
         else {
-            console.log("het bestaat niet");
+            console.log("er is geen weerdata");
         }
     }
     locationData(location) {
@@ -54,37 +36,39 @@ class WeatherView {
     hourlyData(twoDaysData) {
         this.allHourlyData = twoDaysData["data"];
 
+        this.icon = document.createElement("canvas");
+        this.icon.className = "clear-day";
+        this.icon.width = 100;
+        this.icon.height = 100;
+        this.view.appendChild(this.icon);
+
         this.locationSummary = document.createElement("p");
-        this.locationSummary.id = "locatie";
+        this.locationSummary.id = "summary";
         this.locationSummary.innerHTML = twoDaysData["summary"];
         this.view.appendChild(this.locationSummary);
 
         this.allHourlyData.forEach((h) => {
-            console.log(h);
-
             this.hourInfo = document.createElement("div");
             this.hourInfo.className = "uur";
 
+            this.middle = document.createElement("div");
+            this.middle.className = "middle group";
+
+            this.bottom = document.createElement("div");
+            this.bottom.className = "bottom group";
+
             this.icon = document.createElement("canvas");
-            this.icon.id = h["icon"];
-            this.icon.style.width = 30;
-            this.icon.style.heigth = 30;
+            this.icon.className = "icon " + h["icon"];
+            this.icon.width = 80;
+            this.icon.height = 80;
 
             this.time = document.createElement("div");
             this.time.className = "tijd";
-            this.time.innerHTML = "Tijd: "+this.convertToTime(h["time"]);
-
-            this.sum = document.createElement("div");
-            this.sum.className = "summary";
-            this.sum.innerHTML = h["summary"];
+            this.time.innerHTML = this.convertToTime(h["time"]);
 
             this.temp = document.createElement("div");
             this.temp.className = "temperatuur";
-            this.temp.innerHTML = "Temperatuur: "+this.tempFahToCel(h["apparentTemperature"]);
-
-            this.cloud = document.createElement("div");
-            this.cloud.className = "bewolking";
-            this.cloud.innerHTML = "Bewolking: "+h["cloudCover"];
+            this.temp.innerHTML = this.tempFahToCel(h["apparentTemperature"]);
 
             this.prob = document.createElement("div");
             this.prob.className = "kans";
@@ -102,70 +86,57 @@ class WeatherView {
             this.speed.className = "kracht";
             this.speed.innerHTML = "Wind kracht: "+h["windSpeed"];
 
-            // this.hourInfo.appendChild(this.icon);
             this.hourInfo.appendChild(this.time);
-            this.hourInfo.appendChild(this.sum);
-            this.hourInfo.appendChild(this.temp);
-            this.hourInfo.appendChild(this.cloud);
-            this.hourInfo.appendChild(this.intens);
-            this.hourInfo.appendChild(this.bearing);
-            this.hourInfo.appendChild(this.speed);
+            this.middle.appendChild(this.icon);
+            this.middle.appendChild(this.temp);
+            this.hourInfo.appendChild(this.middle);
+            // this.hourInfo.appendChild(this.prob);
+            // this.hourInfo.appendChild(this.intens);
+            // this.hourInfo.appendChild(this.bearing);
+            // this.hourInfo.appendChild(this.speed);
 
             this.view.appendChild(this.hourInfo);
-
         });
     }
     dailyData() {
 
     }
     tempFahToCel(f) {
-        return ((5/9) * (f-32)).toFixed(1);
+        //convert fahrenheid naar celsius met een decimaal
+        return ((5/9) * (f-32)).toFixed(0)+"°C";
     }
     convertToTime(t) {
+        //maak datum
         this.datum = new Date(t*1000);
 
-        this.day = this.datum.getDate();
-        if (this.day.toString().length == 1) this.day = "0"+this.day;
-
+        //pakt maand en zet hem om naar text
         this.month = this.monthNames[this.datum.getMonth()];
 
+        //pak uur en maak er uu:mm van
         this.hour = this.datum.getHours();
         if (this.hour.toString().length == 1) this.hour = "0"+this.hour;
         this.hour = this.hour+":00";
 
-        return this.day+" "+this.month+" "+this.hour;
+        // kijken of deze datums gelijk zijn
+        if (this.datum.getDate() != this.day) {
+            if (typeof this.day != 'undefined') {
+                this.clear = document.createElement("div");
+                this.clear.className = "clear";
+                this.view.appendChild(this.clear);
+            }
+            this.day = this.datum.getDate();
+            if (this.day.toString().length == 1) this.day = "0"+this.day;
+
+            this.dagMaand = document.createElement("div");
+            this.dagMaand.className = "dag";
+            this.dagMaand.innerHTML = this.day+" "+this.month;
+            this.view.appendChild(this.dagMaand);
+        }
+        else {
+            this.day = this.datum.getDate();
+            if (this.day.toString().length == 1) this.day = "0"+this.day;
+        }
+        return this.hour;
     }
 }
 module.exports = WeatherView;
-
-// this.icon1 = document.createElement('canvas');
-// this.icon1.id = 'icon1';
-//
-// this.icon2 = document.createElement('canvas');
-// this.icon2.id = 'icon2';
-//
-// var skycons = new Skycons({"color": "pink"});
-// // on Android, a nasty hack is needed: {"resizeClear": true}
-//
-// // you can add a canvas by it's ID...
-// skycons.add("icon1", Skycons.PARTLY_CLOUDY_DAY);
-//
-// // ...or by the canvas DOM element itself.
-// skycons.add(document.getElementById("icon2"), Skycons.RAIN);
-//
-// // if you're using the Forecast API, you can also supply
-// // strings: "partly-cloudy-day" or "rain".
-//
-// // start animation!
-// skycons.play();
-//
-// // you can also halt animation with skycons.pause()
-//
-// // want to change the icon? no problem:
-// skycons.set("icon1", Skycons.PARTLY_CLOUDY_NIGHT);
-//
-// // want to remove one altogether? no problem:
-// skycons.remove("icon2");
-//
-// this.view.appendChild(this.icon1);
-// this.view.appendChild(this.icon2);

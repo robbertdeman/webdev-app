@@ -6,7 +6,7 @@ class DarkSkyAPI {
         this.callAPI();
     }
     callAPI() {
-        this.darkSkyURL = "/proxy.php/?url=" + this.lat + ","+ this.lng;
+        this.darkSkyURL = "/weerapp/proxy.php/?url=" + this.lat + ","+ this.lng;
         this.xhttp = new XMLHttpRequest();
         this.xhttp.onreadystatechange = ()=> {
             if (this.xhttp.readyState == 4 && this.xhttp.status == 200) {

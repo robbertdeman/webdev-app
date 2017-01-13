@@ -5,11 +5,11 @@ class GeoLocation {
         this.callAPI();
     }
     callAPI() {
-        console.log("hi");
         this.googleMapsURL = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+this.lat+","+this.lng+"&sensor=true"
         this.xhttp = new XMLHttpRequest();
         this.xhttp.onreadystatechange = ()=> {
             if (this.xhttp.readyState == 4 && this.xhttp.status == 200) {
+                console.log(this.xhttp.responseText);
                 this.response(JSON.parse(this.xhttp.responseText));
             }
         };

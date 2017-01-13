@@ -1,7 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+.group:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 html, body {
@@ -11,6 +19,7 @@ html, body {
 body {
   padding: 0;
   margin: 0;
+  font-family: 'Raleway', sans-serif;
 }
 
 #root {
@@ -58,6 +67,8 @@ h1 {
   overflow-y: scroll;
   padding: 20px;
   height: 100%;
+  background: #2d3e50;
+  color: #eee;
 }
 
 .overzicht p {
@@ -65,7 +76,41 @@ h1 {
 }
 
 .overzicht .uur {
-  margin: 10px 0;
+  //font-size: 24px;
+  margin: 10px 10px 0 0;
+  float: left;
+  text-align: center;
+  background: #a45bb4;
+  border-radius: 5px;
+}
+
+.overzicht .tijd {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.overzicht .icon, .overzicht .temperatuur {
+  float: left;
+}
+
+.overzicht .icon {
+  width: 80px;
+}
+
+.overzicht .temperatuur {
+  text-align: center;
+  width: 80px;
+  font-size: 30px;
+  line-height: 70px;
+}
+
+.overzicht .dag {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.clear {
+  clear: both;
 }
 
 .map {

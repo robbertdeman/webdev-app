@@ -2,7 +2,7 @@ const GoogleMaps = require("./GoogleMapsAPI.es6");
 const DarkSkyAPI = require("./DarkSkyAPI.es6");
 const WeatherView = require("./WeatherView.es6");
 const GeoLocation = require("./GeoLocation.es6");
-// const Skycons = require("./skycons.js");
+const SkyconsView = require("./SkyconsView.es6");
 
 class Controller {
     constructor() {
@@ -11,8 +11,10 @@ class Controller {
 
         this.googleMaps = new GoogleMaps();
         this.weatherView = new WeatherView();
+        this.skyconsView = new SkyconsView();
         this.geoLocation = new GeoLocation(this.googleMaps.latLng);
         this.darkSkyAPI = new DarkSkyAPI(this.googleMaps.latLng, this.update);
+
         this.watch();
     }
     watch() {
@@ -27,6 +29,7 @@ class Controller {
     }
     update() {
         this.weatherView.divideData(this.darkSkyAPI.weatherData, this.geoLocation.location);
+        this.skyconsView.createSkycons();
     }
 }
 

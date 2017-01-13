@@ -9,19 +9,8 @@
 <body>
 <div id="root">
     <div class="overzicht">
-        <canvas id="clear-day" width="30" height="30"></canvas>
-        <canvas id="clear-night" width="30" height="30"></canvas>
-        <canvas id="partly-cloudy-day" width="30" height="30"></canvas>
-        <canvas id="partly-cloudy-night" width="30" height="30"></canvas>
-        <canvas id="cloudy" width="30" height="30"></canvas>
-        <canvas id="rain" width="30" height="30"></canvas>
-        <canvas id="sleet" width="30" height="30"></canvas>
-        <canvas id="snow" width="30" height="30"></canvas>
-        <canvas id="wind" width="30" height="30"></canvas>
-        <canvas id="fog" width="30" height="30"></canvas>
-
         <h1>Weer API Robbert de Man</h1>
-            <div id="weerinfo"></div>
+        <div id="weerinfo"></div>
     </div>
     <div class="map">
         <input id="pac-input" class="controls" type="text" placeholder="Search Box">
@@ -32,25 +21,7 @@
 <script src="src/skycons.js"></script>
 <script src="dist/script.js"></script>
 <script>
-    var skycons = new Skycons({"color": "black"});
-    // on Android, a nasty hack is needed: {"resizeClear": true}
 
-    window.requestAnimationFrame(function() {
-        // you can add a canvas by it's ID...
-        skycons.add("clear-day", Skycons.CLEAR_DAY);
-        skycons.add("clear-night", Skycons.CLEAR_NIGHT);
-        skycons.add("partly-cloudy-day", Skycons.PARTLY_CLOUDY_DAY);
-        skycons.add("partly-cloudy-night", Skycons.PARTLY_CLOUDY_NIGHT);
-        skycons.add("cloudy", Skycons.CLOUDY);
-        skycons.add("rain", Skycons.RAIN);
-        skycons.add("sleet", Skycons.SLEET);
-        skycons.add("snow", Skycons.SNOW);
-        skycons.add("wind", Skycons.WIND);
-        skycons.add("fog", Skycons.FOG);
-    });
-
-    // start animation!
-    skycons.play();
 </script>
 </body>
 </html>
